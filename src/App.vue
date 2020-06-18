@@ -1,28 +1,85 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+	<div id="app">
+		<div class="monster">
+			<span>Pikachu</span>
+			<img src="/pika.jpg" alt="">
+
+		</div>
+	</div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+    let STORAGE_KEY = "data-clicker"
+    let progressStorage = {
+        fetch: () => {
+            let progress = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]")
+            progress.forEach((item, key) => {
+                item.id = key
+            })
+            progressStorage.uid = progress.length
+        },
+        save: (progress) => {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress))
+        }
+    }
 
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  }
-}
+    export default {
+        name: 'App',
+        data () {
+            return {
+                progress: progressStorage.fetch(),
+                newProgress: "",
+			}
+		},
+		watch: {
+            progress: {
+                handler: function(progress) {
+                    progressStorage.save(progress);
+                },
+                deep: true
+			}
+		},
+		computed: {
+            allDone: {
+                get: function() {
+                    return this.remaining === 0;
+                },
+                set: function(value) {
+                    this.progress.forEach(function(info) {
+                        info.completed = value;
+                    });
+                }
+            }
+		},
+
+        methods: {
+            clickProgress: function () {
+                let value = this.newProgress && this.newProgress.trim();
+                if (!value) {
+                    return;
+                }
+                this.progress().push({
+                    id: progressStorage.uid++,
+                    title: value,
+                    completed: false
+                });
+                this.newProgress = "";
+			}
+		}
+    }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+	.monster {
+		width: 300px;
+	}
+	.monster img {
+		width: 100%;
+	}
+	.monster span {
+		display: block;
+		padding-top: 10px;
+		font-size: 16px;
+		text-align: center;
+	}
 </style>
