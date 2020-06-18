@@ -1,25 +1,74 @@
+
 <template>
 	<div id="app">
-		<div class="monster">
-			<span>Pikachu</span>
-			<img src="/pika.jpg" alt="">
-
+		<div v-for="(monster, id) in monsters" :key="id"
+				class="monster">
+			<span>{{ monster.name }}</span>
+			<b-progress :value="monster.hp.now" :max="monster.hp.full"  variant="danger"></b-progress>
+			<span>{{ monster.hp.now }} / {{ monster.hp.full }}</span>
+			<img
+					@click="attack(id)"
+					:src="monster.img">
 		</div>
 	</div>
 </template>
 
 <script>
-    let STORAGE_KEY = "data-clicker"
+    import Vue from 'vue'
+    import { BootstrapVue } from 'bootstrap-vue'
+    import 'bootstrap/dist/css/bootstrap.css'
+    import 'bootstrap-vue/dist/bootstrap-vue.css'
+    Vue.use(BootstrapVue)
+
+    const yourStats = () => {
+        return {
+            'hp': {
+                'now': 200,
+                'full': 215
+            },
+            'attack': {
+                'min': 2,
+                'max': 4
+            }
+        }
+    }
+    const monstersLoad = () => {
+        return {
+            0: {
+                'name': 'Pikachu',
+                'img': '/pika.jpg',
+                'hp': {
+                    'now': 10,
+                    'full': 10
+                },
+                'attack': {
+                    'min': 1,
+                    'max': 2
+                },
+                'defense': 0,
+                'critical-chance': 0,
+                'loot': {
+                    'money': {
+                        'min': 1,
+                        'max': 4
+                    }
+                }
+            }
+        };
+    }
     let progressStorage = {
         fetch: () => {
-            let progress = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]")
-            progress.forEach((item, key) => {
-                item.id = key
-            })
-            progressStorage.uid = progress.length
+            let progress = JSON.parse(localStorage.getItem('monster-progress') || '[]')
+			let monster = monstersLoad()
+            for (let item in monster) {
+                if (progress[item]===undefined) {
+                    progress[item] = monster[item]
+				}
+            }
+            return progress
         },
         save: (progress) => {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(progress))
+            localStorage.setItem('monster-progress', JSON.stringify(progress))
         }
     }
 
@@ -27,14 +76,14 @@
         name: 'App',
         data () {
             return {
-                progress: progressStorage.fetch(),
-                newProgress: "",
+				personStats: yourStats(),
+                monsters: progressStorage.fetch()
 			}
 		},
 		watch: {
-            progress: {
-                handler: function(progress) {
-                    progressStorage.save(progress);
+            monsters: {
+                handler: function(monsters) {
+                    progressStorage.save(monsters);
                 },
                 deep: true
 			}
@@ -53,18 +102,16 @@
 		},
 
         methods: {
-            clickProgress: function () {
-                let value = this.newProgress && this.newProgress.trim();
-                if (!value) {
-                    return;
-                }
-                this.progress().push({
-                    id: progressStorage.uid++,
-                    title: value,
-                    completed: false
-                });
-                this.newProgress = "";
-			}
+            attack: function (keyMonster) {
+                let attackResult = this.monsters[keyMonster].hp.now - this.randomStat(this.personStats.attack)
+				attackResult <= 0 ? this.dieMonster(keyMonster) : this.monsters[keyMonster].hp.now = attackResult
+			},
+			randomStat: function (stat) {
+                return Math.floor(Math.random() * (stat.max - stat.min) + stat.min);
+			},
+			dieMonster: function (keyMonster) {
+                this.monsters[keyMonster].hp.now = this.monsters[keyMonster].hp.full
+            }
 		}
     }
 </script>
@@ -75,6 +122,7 @@
 	}
 	.monster img {
 		width: 100%;
+		cursor: pointer;
 	}
 	.monster span {
 		display: block;
