@@ -10,6 +10,22 @@
 					@click="attack(id)"
 					:src="monster.img">
 		</div>
+
+		<div class="my-stat">
+			<div>
+				Money: {{ personStats.money }}
+			</div>
+			<div>
+				Attack: {{ personStats.attack.min }} - {{ personStats.attack.max }}
+			</div>
+			<div>
+				<b-progress :max="personStats.hp.full" variant="danger">
+					<b-progress-bar variant="danger" :value="personStats.hp.now">
+						<strong>{{ personStats.hp.now }} / {{ personStats.hp.full }}</strong>
+					</b-progress-bar>
+				</b-progress>
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -29,7 +45,8 @@
             'attack': {
                 'min': 2,
                 'max': 4
-            }
+            },
+			'money': 10
         }
     }
     const monstersLoad = () => {
@@ -105,18 +122,26 @@
             attack: function (keyMonster) {
                 let attackResult = this.monsters[keyMonster].hp.now - this.randomStat(this.personStats.attack)
 				attackResult <= 0 ? this.dieMonster(keyMonster) : this.monsters[keyMonster].hp.now = attackResult
+				let monsterAttackYou = this.personStats.hp.now - this.randomStat(this.monsters[keyMonster].attack)
+                monsterAttackYou <= 0 ? this.youDie() : this.personStats.hp.now = monsterAttackYou
 			},
 			randomStat: function (stat) {
                 return Math.floor(Math.random() * (stat.max - stat.min) + stat.min);
 			},
 			dieMonster: function (keyMonster) {
                 this.monsters[keyMonster].hp.now = this.monsters[keyMonster].hp.full
+            },
+            youDie: function () {
+                this.personStats.hp.now = this.personStats.hp.max
             }
 		}
     }
 </script>
 
 <style>
+	body {
+		min-height: 100vh;
+	}
 	.monster {
 		width: 300px;
 	}
@@ -129,5 +154,13 @@
 		padding-top: 10px;
 		font-size: 16px;
 		text-align: center;
+	}
+	.my-stat {
+		position: absolute;
+		left: 0;
+		width: 100%;
+		bottom: 0;
+		padding: 30px 50px;
+		background-color: #ddd;
 	}
 </style>
