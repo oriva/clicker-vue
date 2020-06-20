@@ -28,6 +28,11 @@
 					</b-progress-bar>
 				</b-progress>
 			</div>
+
+			<div>
+				<b-progress :value="personStats.exp.now" :max="personStats.exp.need" variant="dark"></b-progress>
+				<strong>exp: {{ personStats.exp.now }} / {{ personStats.exp.need }}</strong>
+			</div>
 		</div>
 
 			</div>
@@ -57,10 +62,10 @@
                 'now': 0,
 				'need': 100000
 			},
-			'regeneration': {
+            'regeneration': {
                 'min': 1,
-				'max': 7
-			}
+                'max': 7
+            }
         }
     }
     const monstersLoad = () => {
@@ -106,7 +111,28 @@
                     },
 					'exp': 15
                 }
-            }
+            },
+            2: {
+                'name': 'Big russian boss',
+                'img': '/brb.png',
+                'hp': {
+                    'now': 7777,
+                    'full': 7777
+                },
+                'attack': {
+                    'min': 10,
+                    'max': 55
+                },
+                'defense': 2,
+                'critical-chance': 10,
+                'loot': {
+                    'money': {
+                        'min': 100,
+                        'max': 4000
+                    },
+                    'exp': 10000
+                }
+            },
         };
     }
 
@@ -121,6 +147,8 @@
 			if(locName==='monster-progress') {
                 let monster = monstersLoad()
                 for (let item in monster) {
+                    if(progress[item]===undefined)
+                        continue
                     if (progress[item].hp.now !== progress[item].hp.full) {
                         monster[item].hp.now = progress[item].hp.now
                     }
@@ -151,7 +179,7 @@
         data () {
             return {
 				personStats: progressStorage.fetch('person-progress'),
-                monsters: progressStorage.fetch()
+                monsters: progressStorage.fetch(),
 			}
 		},
 		watch: {
@@ -173,15 +201,31 @@
             attack: function (keyMonster) {
                 let attackResult = this.monsters[keyMonster].hp.now - randomStat(this.personStats.attack)
 				attackResult <= 0 ? this.dieMonster(keyMonster) : this.monsters[keyMonster].hp.now = attackResult
+
 				let monsterAttackYou = this.personStats.hp.now - randomStat(this.monsters[keyMonster].attack)
                 monsterAttackYou <= 0 ? this.youDie() : this.personStats.hp.now = monsterAttackYou
+
+                this.regenHp()
+			},
+			regenHp: function (regen = this.personStats.regeneration) {
+                let hpNow = this.personStats.hp.now
+                let hpMax = this.personStats.hp.full
+				if (typeof regen === 'object') {
+                    regen = randomStat(regen)
+				}
+				hpNow+regen>hpMax?hpNow=hpMax:hpNow+=regen
+                this.personStats.hp.now = hpNow
 			},
 			dieMonster: function (keyMonster) {
                 this.monsters[keyMonster].hp.now = this.monsters[keyMonster].hp.full
 				this.personStats.money += randomStat(this.monsters[keyMonster].loot.money)
+				this.personStats.exp.now += this.monsters[keyMonster].loot.exp
             },
             youDie: function () {
-                this.personStats.hp.now = this.personStats.hp.max
+                console.log('you die')
+                this.personStats.hp.now = this.personStats.hp.full
+				if(this.personStats.exp.now!==0)
+                    this.personStats.exp.now = Math.round(this.personStats.exp.now*0.98)
             }
 		}
     }
@@ -191,9 +235,6 @@
 	#app {
 		min-height: 100vh;
 		position: relative;
-	}
-	.monster {
-		width: 300px;
 	}
 	.monster img {
 		width: 100%;
