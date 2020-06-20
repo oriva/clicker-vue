@@ -1,8 +1,11 @@
 
 <template>
 	<div id="app">
+		<div class="container-fluid">
+			<div class="row">
+
 		<div v-for="(monster, id) in monsters" :key="id"
-				class="monster">
+				class="monster col-4">
 			<span>{{ monster.name }}</span>
 			<b-progress :value="monster.hp.now" :max="monster.hp.full"  variant="danger"></b-progress>
 			<span>{{ monster.hp.now }} / {{ monster.hp.full }}</span>
@@ -26,6 +29,9 @@
 				</b-progress>
 			</div>
 		</div>
+
+			</div>
+		</div>
 	</div>
 </template>
 
@@ -46,7 +52,15 @@
                 'min': 2,
                 'max': 4
             },
-			'money': 10
+			'money': 10,
+			'exp': {
+                'now': 0,
+				'need': 100000
+			},
+			'regeneration': {
+                'min': 1,
+				'max': 7
+			}
         }
     }
     const monstersLoad = () => {
@@ -68,24 +82,67 @@
                     'money': {
                         'min': 1,
                         'max': 4
-                    }
+                    },
+					'exp': 10
+                }
+            },
+            1: {
+                'name': 'Pikachu',
+                'img': '/cher.png',
+                'hp': {
+                    'now': 15,
+                    'full': 15
+                },
+                'attack': {
+                    'min': 1,
+                    'max': 3
+                },
+                'defense': 0,
+                'critical-chance': 0,
+                'loot': {
+                    'money': {
+                        'min': 3,
+                        'max': 6
+                    },
+					'exp': 15
                 }
             }
         };
     }
+
+    const randomStat = (stat) => {
+        return Math.floor(Math.random() * (stat.max - stat.min) + stat.min);
+	}
+
     let progressStorage = {
-        fetch: () => {
-            let progress = JSON.parse(localStorage.getItem('monster-progress') || '[]')
-			let monster = monstersLoad()
-            for (let item in monster) {
-                if (progress[item]===undefined) {
-                    progress[item] = monster[item]
+        fetch: (locName) => {
+            locName = locName || 'monster-progress'
+            let progress = JSON.parse(localStorage.getItem(locName) || '[]')
+			if(locName==='monster-progress') {
+                let monster = monstersLoad()
+                for (let item in monster) {
+                    if (progress[item].hp.now !== progress[item].hp.full) {
+                        monster[item].hp.now = progress[item].hp.now
+                    }
+                }
+                progress = monster;
+			} else {
+                if (progress.length === 0) {
+                    progress = yourStats()
+				} else {
+                    let staticProgress = yourStats()
+                    Object.keys(staticProgress).forEach(function(key) {
+                        if (progress[key]===undefined) {
+                            progress[key] = this[key]
+						}
+                    }, staticProgress);
 				}
-            }
+			}
             return progress
         },
-        save: (progress) => {
-            localStorage.setItem('monster-progress', JSON.stringify(progress))
+        save: (progress, locName) => {
+            locName = locName || 'monster-progress'
+            localStorage.setItem(locName, JSON.stringify(progress))
         }
     }
 
@@ -93,43 +150,35 @@
         name: 'App',
         data () {
             return {
-				personStats: yourStats(),
+				personStats: progressStorage.fetch('person-progress'),
                 monsters: progressStorage.fetch()
 			}
 		},
 		watch: {
             monsters: {
                 handler: function(monsters) {
-                    progressStorage.save(monsters);
+                    progressStorage.save(monsters, 'monster-progress');
                 },
                 deep: true
+			},
+            personStats: {
+                handler: function(personStats) {
+                    progressStorage.save(personStats, 'person-progress');
+				},
+                deep: true
 			}
-		},
-		computed: {
-            allDone: {
-                get: function() {
-                    return this.remaining === 0;
-                },
-                set: function(value) {
-                    this.progress.forEach(function(info) {
-                        info.completed = value;
-                    });
-                }
-            }
 		},
 
         methods: {
             attack: function (keyMonster) {
-                let attackResult = this.monsters[keyMonster].hp.now - this.randomStat(this.personStats.attack)
+                let attackResult = this.monsters[keyMonster].hp.now - randomStat(this.personStats.attack)
 				attackResult <= 0 ? this.dieMonster(keyMonster) : this.monsters[keyMonster].hp.now = attackResult
-				let monsterAttackYou = this.personStats.hp.now - this.randomStat(this.monsters[keyMonster].attack)
+				let monsterAttackYou = this.personStats.hp.now - randomStat(this.monsters[keyMonster].attack)
                 monsterAttackYou <= 0 ? this.youDie() : this.personStats.hp.now = monsterAttackYou
-			},
-			randomStat: function (stat) {
-                return Math.floor(Math.random() * (stat.max - stat.min) + stat.min);
 			},
 			dieMonster: function (keyMonster) {
                 this.monsters[keyMonster].hp.now = this.monsters[keyMonster].hp.full
+				this.personStats.money += randomStat(this.monsters[keyMonster].loot.money)
             },
             youDie: function () {
                 this.personStats.hp.now = this.personStats.hp.max
@@ -139,8 +188,9 @@
 </script>
 
 <style>
-	body {
+	#app {
 		min-height: 100vh;
+		position: relative;
 	}
 	.monster {
 		width: 300px;
