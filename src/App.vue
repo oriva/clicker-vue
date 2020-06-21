@@ -4,24 +4,28 @@
 		<div class="container-fluid">
 			<div class="row">
 
-		<div v-for="(monster, id) in monsters" :key="id"
-				class="monster col-4">
-			<span>{{ monster.name }}</span>
-			<b-progress :value="monster.hp.now" :max="monster.hp.full"  variant="danger"></b-progress>
-			<span>{{ monster.hp.now }} / {{ monster.hp.full }}</span>
-			<img
-					@click="attack(id)"
-					:src="monster.img">
+				<div v-for="(monster, id) in monsters" :key="id"
+						class="monster col-4">
+					<span>{{ monster.name }}</span>
+					<b-progress :value="monster.hp.now" :max="monster.hp.full"  variant="danger"></b-progress>
+					<span>{{ monster.hp.now }} / {{ monster.hp.full }}</span>
+					<img
+							@click="attack(id)"
+							:src="monster.img">
+				</div>
+			</div>
 		</div>
-
 		<div class="my-stat">
-			<div>
-				Money: {{ personStats.money }}
+			<div class="my-stat__money-block col-auto">
+				<img src="/money.svg" class="my-stat-icon" alt=""> {{ personStats.money }}
 			</div>
-			<div>
-				Attack: {{ personStats.attack.min }} - {{ personStats.attack.max }}
+			<div class="col-auto">
+				<img src="/sword.svg" class="my-stat-icon" alt=""> {{ personStats.attack.min }} - {{ personStats.attack.max }}
 			</div>
-			<div>
+			<div class="col">
+				<UpgradePerson></UpgradePerson>
+			</div>
+			<div class="col-12 progress-stat">
 				<b-progress :max="personStats.hp.full" variant="danger">
 					<b-progress-bar variant="danger" :value="personStats.hp.now">
 						<strong>{{ personStats.hp.now }} / {{ personStats.hp.full }}</strong>
@@ -29,12 +33,9 @@
 				</b-progress>
 			</div>
 
-			<div>
+			<div class="col-12 progress-stat">
 				<b-progress :value="personStats.exp.now" :max="personStats.exp.need" variant="dark"></b-progress>
 				<strong>exp: {{ personStats.exp.now }} / {{ personStats.exp.need }}</strong>
-			</div>
-		</div>
-
 			</div>
 		</div>
 	</div>
@@ -42,6 +43,7 @@
 
 <script>
     import Vue from 'vue'
+	import UpgradePerson from './components/UpgradePerson'
     import { BootstrapVue } from 'bootstrap-vue'
     import 'bootstrap/dist/css/bootstrap.css'
     import 'bootstrap-vue/dist/bootstrap-vue.css'
@@ -176,6 +178,9 @@
 
     export default {
         name: 'App',
+		components: {
+            UpgradePerson
+		},
         data () {
             return {
 				personStats: progressStorage.fetch('person-progress'),
@@ -247,11 +252,20 @@
 		text-align: center;
 	}
 	.my-stat {
-		position: absolute;
+		margin-top: 40px;
+		position: relative;
 		left: 0;
 		width: 100%;
 		bottom: 0;
+		display: flex;
+		flex-wrap: wrap;
 		padding: 30px 50px;
 		background-color: #ddd;
+	}
+	.my-stat-icon {
+		width: 30px;
+	}
+	.progress-stat {
+		margin-top: 15px;
 	}
 </style>
