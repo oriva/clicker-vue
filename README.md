@@ -6,3 +6,4 @@
 npm run serve
 ```
 
+Проект смотрите тут http://mystandup.ru/
