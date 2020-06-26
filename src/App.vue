@@ -20,10 +20,10 @@
 				<img src="/money.svg" class="my-stat-icon" alt=""> {{ personStats.money }}
 			</div>
 			<div class="col-auto">
-				<img src="/sword.svg" class="my-stat-icon" alt=""> {{ personStats.attack.min }} - {{ personStats.attack.max }}
+				<img src="/sword.svg" class="my-stat-icon" alt=""> {{ attackSum.min }} - {{ attackSum.max }}
 			</div>
 			<div class="col">
-				<UpgradePerson></UpgradePerson>
+				<UpgradePerson :stats="personStats"/>
 			</div>
 			<div class="col-12 progress-stat">
 				<b-progress :max="personStats.hp.full" variant="danger">
@@ -43,11 +43,13 @@
 
 <script>
     import Vue from 'vue'
+    import Vuex from 'vuex'
 	import UpgradePerson from './components/UpgradePerson'
     import { BootstrapVue } from 'bootstrap-vue'
     import 'bootstrap/dist/css/bootstrap.css'
     import 'bootstrap-vue/dist/bootstrap-vue.css'
-    Vue.use(BootstrapVue)
+    Vue.use(BootstrapVue);
+    Vue.use(Vuex);
 
     const yourStats = () => {
         return {
@@ -57,7 +59,9 @@
             },
             'attack': {
                 'min': 2,
-                'max': 4
+                'max': 4,
+				'upgrade': 0,
+				'items': 0
             },
 			'money': 10,
 			'exp': {
@@ -129,8 +133,8 @@
                 'critical-chance': 10,
                 'loot': {
                     'money': {
-                        'min': 100,
-                        'max': 4000
+                        'min': 1000,
+                        'max': 40000
                     },
                     'exp': 10000
                 }
@@ -140,7 +144,7 @@
 
     const randomStat = (stat) => {
         return Math.floor(Math.random() * (stat.max - stat.min) + stat.min);
-	}
+	};
 
     let progressStorage = {
         fetch: (locName) => {
@@ -164,6 +168,14 @@
                     Object.keys(staticProgress).forEach(function(key) {
                         if (progress[key]===undefined) {
                             progress[key] = this[key]
+						} else {
+                            if(typeof progress[key] == 'object') {
+                                Object.keys(staticProgress[key]).forEach((keyToo) => {
+                                    if (progress[key][keyToo]===undefined) {
+                                        progress[key][keyToo] = this[key][keyToo]
+                                    }
+                                })
+							}
 						}
                     }, staticProgress);
 				}
@@ -187,6 +199,14 @@
                 monsters: progressStorage.fetch(),
 			}
 		},
+		computed: {
+            attackSum: function () {
+                return {
+                    'min': this.personStats.attack.min + this.personStats.attack.upgrade,
+					'max': this.personStats.attack.max + this.personStats.attack.upgrade
+                }
+            }
+		},
 		watch: {
             monsters: {
                 handler: function(monsters) {
@@ -204,7 +224,7 @@
 
         methods: {
             attack: function (keyMonster) {
-                let attackResult = this.monsters[keyMonster].hp.now - randomStat(this.personStats.attack)
+                let attackResult = this.monsters[keyMonster].hp.now - randomStat(this.attackSum)
 				attackResult <= 0 ? this.dieMonster(keyMonster) : this.monsters[keyMonster].hp.now = attackResult
 
 				let monsterAttackYou = this.personStats.hp.now - randomStat(this.monsters[keyMonster].attack)
