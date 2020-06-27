@@ -1,0 +1,24 @@
+{
+  "1": {
+    "needExp": 100,
+    "baseAttack": {
+      "min": 2,
+      "max": 4
+    },
+    "baseDef": 1,
+    "hp": {
+      "full": 215
+    }
+  },
+  "2": {
+    "needExp": 1000,
+    "baseAttack": {
+      "min": 3,
+      "max": 6
+    },
+    "baseDef": 1,
+    "hp": {
+      "full": 220
+    }
+  }
+}

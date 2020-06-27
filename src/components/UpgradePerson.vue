@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<button @click="showModal = !showModal">Upgrade</button>
+		<b-button @click="showModal = !showModal">Upgrade</b-button>
 		<b-modal v-model="showModal" title="Усиление персонажа" ok-only>
 			<b-button @click="upgradeAttack"><img src="/money.svg" class="my-stat-icon" alt=""> {{ moneyForUpgrade }}</b-button>
 			<div class="d-inline-block pl-4">

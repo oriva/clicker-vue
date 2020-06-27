@@ -15,7 +15,17 @@
 				</div>
 			</div>
 		</div>
-		<div class="my-stat">
+		<div class="my-stat align-items-center">
+			<div class="col-auto">
+				<div class="my-stat__avatar">
+					<img :src="personStats.info.avatar" alt="">
+					<div>
+						<span>
+							{{ personStats.level }} <br><small>lvl</small>
+						</span>
+					</div>
+				</div>
+			</div>
 			<div class="my-stat__money-block col-auto">
 				<img src="/money.svg" class="my-stat-icon" alt=""> {{ personStats.money }}
 			</div>
@@ -44,18 +54,27 @@
 <script>
     import Vue from 'vue'
     import Vuex from 'vuex'
-	import UpgradePerson from './components/UpgradePerson'
-    import { BootstrapVue } from 'bootstrap-vue'
+    import UpgradePerson from './components/UpgradePerson'
+    import {BootstrapVue} from 'bootstrap-vue'
     import 'bootstrap/dist/css/bootstrap.css'
     import 'bootstrap-vue/dist/bootstrap-vue.css'
+    import {debounce} from "debounce"
+
     Vue.use(BootstrapVue);
     Vue.use(Vuex);
 
     const yourStats = () => {
         return {
+            'info': {
+                'name': 'Gigurda',
+				'avatar': '/avatar.jpg'
+			},
+			'level': 1,
             'hp': {
                 'now': 200,
-                'full': 215
+                'full': 215,
+                'upgrade': 0,
+                'items': 0
             },
             'attack': {
                 'min': 2,
@@ -66,11 +85,13 @@
 			'money': 10,
 			'exp': {
                 'now': 0,
-				'need': 100000
+				'need': 100,
 			},
             'regeneration': {
                 'min': 1,
-                'max': 7
+                'max': 7,
+                'upgrade': 0,
+                'items': 0
             }
         }
     }
@@ -101,21 +122,21 @@
                 'name': 'Pikachu',
                 'img': '/cher.png',
                 'hp': {
-                    'now': 15,
-                    'full': 15
+                    'now': 150,
+                    'full': 150
                 },
                 'attack': {
-                    'min': 1,
-                    'max': 3
+                    'min': 15,
+                    'max': 19
                 },
                 'defense': 0,
                 'critical-chance': 0,
                 'loot': {
                     'money': {
-                        'min': 3,
-                        'max': 6
+                        'min': 15,
+                        'max': 60
                     },
-					'exp': 15
+                    'exp': 150
                 }
             },
             2: {
@@ -223,7 +244,7 @@
 		},
 
         methods: {
-            attack: function (keyMonster) {
+            attack: debounce(function (keyMonster) {
                 let attackResult = this.monsters[keyMonster].hp.now - randomStat(this.attackSum)
 				attackResult <= 0 ? this.dieMonster(keyMonster) : this.monsters[keyMonster].hp.now = attackResult
 
@@ -231,7 +252,7 @@
                 monsterAttackYou <= 0 ? this.youDie() : this.personStats.hp.now = monsterAttackYou
 
                 this.regenHp()
-			},
+            }, 100),
 			regenHp: function (regen = this.personStats.regeneration) {
                 let hpNow = this.personStats.hp.now
                 let hpMax = this.personStats.hp.full
@@ -272,19 +293,64 @@
 		text-align: center;
 	}
 	.my-stat {
-		margin-top: 40px;
-		position: relative;
-		left: 0;
-		width: 100%;
-		bottom: 0;
-		display: flex;
-		flex-wrap: wrap;
-		padding: 30px 50px;
+		margin-top:       40px;
+		position:         fixed;
+		left:             0;
+		width:            100%;
+		bottom:           0;
+		display:          flex;
+		flex-wrap:        wrap;
+		padding:          30px 50px;
 		background-color: #ddd;
 	}
 	.my-stat-icon {
 		width: 30px;
 	}
+
+	.my-stat__avatar {
+		position: relative;
+		display: block;
+		width: 70px;
+		height: 70px;
+		overflow: hidden;
+		border: 2px solid #ee9233;
+		border-radius: 50%;
+		cursor: pointer;
+		transition: .3s ease-in-out;
+	}
+
+	.my-stat__avatar:hover {
+		transform: scale(1.05);
+	}
+
+	.my-stat__avatar span {
+		text-align: center;
+		line-height: 0.9;
+	}
+
+	.my-stat__avatar img {
+		height:     100%;
+		width:      100%;
+		object-fit: cover;
+	}
+
+	.my-stat__avatar div {
+		position:         absolute;
+		left:             0;
+		top:              0;
+		width:            100%;
+		height:           100%;
+		display:          flex;
+		align-items:      center;
+		justify-content:  center;
+		z-index:          2;
+		color:            #FFF;
+		font-size:        20px;
+		font-weight:      bold;
+		vertical-align:   middle;
+		background-color: rgba(0, 0, 0, 0.69);
+	}
+
 	.progress-stat {
 		margin-top: 15px;
 	}
