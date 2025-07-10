@@ -1,0 +1,99 @@
+$h1: (
+    size: 56px,
+    line-height: 72px,
+    weight: 600,
+) !default;
+$h2: (
+    size: 48px,
+    line-height: 64px,
+    weight: 600,
+) !default;
+$h3: (
+    size: 40px,
+    line-height: 56px,
+    weight: 600,
+) !default;
+$h4: (
+    size: 32px,
+    line-height: 48px,
+    weight: 600,
+) !default;
+$h5: (
+    size: 28px,
+    line-height: 36px,
+    weight: 600,
+) !default;
+$h6: (
+    size: 22px,
+    line-height: 32px,
+    weight: 600,
+) !default;
+$h7: (
+    size: 20px,
+    line-height: 28px,
+    weight: 600,
+) !default;
+
+$text-large: (
+    size: 18px,
+    line-height: 28px,
+    weight: 400,
+) !default;
+$text-normal: (
+    size: 16px,
+    line-height: 24px,
+    weight: 400,
+) !default;
+$text-small: (
+    size: 14px,
+    line-height: 20px,
+    weight: 400,
+) !default;
+$text-ultra-small: (
+    size: 12px,
+    line-height: 16px,
+    weight: 400,
+) !default;
+$text-extra-small: (
+    size: 11px,
+    line-height: 14px,
+    weight: 400,
+) !default;
+$text-tab: (
+    size: 10px,
+    line-height: 14px,
+    weight: 400,
+) !default;
+
+$headings: (
+    'h1': $h1,
+    'h2': $h2,
+    'h3': $h3,
+    'h4': $h4,
+    'h5': $h5,
+    'h6': $h6,
+    'h7': $h7,
+    'large': $text-large,
+    'normal': $text-normal,
+    'small': $text-small,
+    'ultra-small': $text-ultra-small,
+    'tab': $text-tab,
+) !default;
+
+@function text-props($map) {
+  @return (
+    font-size: map-get($map, size),
+    line-height: map-get($map, line-height),
+    font-weight: map-get($map, weight)
+  );
+}
+
+@mixin generate-text-classes($headings) {
+  @each $name, $props in $headings {
+    .text-#{$name} {
+      font-size: map-get($props, size);
+      line-height: map-get($props, line-height);
+      font-weight: map-get($props, weight);
+    }
+  }
+}
