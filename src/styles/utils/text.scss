@@ -1,0 +1,22 @@
+@use 'sass:map';
+@use '../variables/text.scss' as text-vars;
+
+.text-shadow-strong {
+    text-shadow: 2px 2px #6b4f1d;
+}
+
+.text-shadow {
+    text-shadow: 1px 1px #6b4f1d;
+}
+
+@mixin generate-text-classes($headings) {
+    @each $name, $props in $headings {
+        .text-size-#{$name} {
+            font-size: map.get($props, size);
+            line-height: map.get($props, line-height);
+            font-weight: map.get($props, weight);
+        }
+    }
+}
+
+@include generate-text-classes(text-vars.$headings);

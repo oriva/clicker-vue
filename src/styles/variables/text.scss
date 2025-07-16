@@ -1,11 +1,11 @@
 $h1: (
-    size: 56px,
-    line-height: 72px,
+    size: 3rem,
+    line-height: 3.3rem,
     weight: 600,
 ) !default;
 $h2: (
-    size: 48px,
-    line-height: 64px,
+    size: 2.5rem,
+    line-height: 3rem,
     weight: 600,
 ) !default;
 $h3: (
@@ -78,22 +78,12 @@ $headings: (
     'small': $text-small,
     'ultra-small': $text-ultra-small,
     'tab': $text-tab,
-) !default;
+);
 
 @function text-props($map) {
-  @return (
-    font-size: map-get($map, size),
-    line-height: map-get($map, line-height),
-    font-weight: map-get($map, weight)
-  );
-}
-
-@mixin generate-text-classes($headings) {
-  @each $name, $props in $headings {
-    .text-#{$name} {
-      font-size: map-get($props, size);
-      line-height: map-get($props, line-height);
-      font-weight: map-get($props, weight);
-    }
-  }
+    @return (
+        font-size: map-get($map, size),
+        line-height: map-get($map, line-height),
+        font-weight: map-get($map, weight)
+    );
 }

@@ -1,9 +1,18 @@
 @use './base';
 
 @use './variables/text';
+@use './utils/index';
 
 .main {
-  display: block;
-  width: 100%;
-  height: 100%;
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+.app-container {
+    display: flex;
+    height: 100vh;
+    background: url('/images/parchment-bg.jpg') center center / cover no-repeat;
+    font-family: 'Cinzel Decorative', serif;
+    color: #3b2c02;
 }

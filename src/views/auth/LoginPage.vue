@@ -1,127 +1,171 @@
 <script setup lang="ts">
-  import { ref } from 'vue'
-  import { useRouter } from 'vue-router'
+    import { reactive, ref } from 'vue';
+    import { useRouter } from 'vue-router';
 
-  const router = useRouter()
-  const username = ref('')
-  const password = ref('')
+    import { FormGroup } from 'src/components';
 
-  function login() {
-    // Здесь будет логика аутентификации
-    router.push({ name: 'Game' })
-  }
+    const router = useRouter();
+    const isRegistering = ref(false);
+    const loginModel = reactive({
+        username: '',
+        password: '',
+    });
+
+    function toggleRegister() {
+        isRegistering.value = !isRegistering.value;
+    }
+
+    function login() {
+        console.log('Авторизация:', loginModel.username, loginModel.password);
+        router.push('/game');
+    }
 </script>
 
 <template>
-  <div class="app-container">
-    <div class="left-pane">
-      <h1 class="title">Добро пожаловать, путник</h1>
-      <form class="login-form" @submit.prevent="login">
-        <div class="form-group">
-          <label for="username">Имя пользователя</label>
-          <input id="username" v-model="username" type="text" required />
+    <div class="app-container">
+        <div class="left-pane flex-center column">
+            <transition name="fade" mode="out-in">
+                <div v-if="isRegistering" key="registration">
+                    <div class="switch-link">
+                        <a href="#" @click.prevent="toggleRegister">Авторизация</a>
+                    </div>
+                </div>
+                <div v-else key="login">
+                    <h1 class="title text-size-h2 text-shadow-strong">Добро пожаловать, путник</h1>
+                    <form class="login-form q-mx-auto" @submit.prevent="login">
+                        <FormGroup id="username" v-model="loginModel.username" required />
+                        <div class="form-group">
+                            <label for="username">Имя пользователя</label>
+                            <input
+                                id="username"
+                                v-model="loginModel.username"
+                                type="text"
+                                required
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Пароль</label>
+                            <input
+                                id="password"
+                                v-model="loginModel.password"
+                                type="password"
+                                required
+                            />
+                        </div>
+                        <button class="login-button text-shadow" type="submit">Войти</button>
+                    </form>
+                </div>
+            </transition>
         </div>
-        <div class="form-group">
-          <label for="password">Пароль</label>
-          <input id="password" v-model="password" type="password" required />
-        </div>
-        <button class="login-button" type="submit">Войти</button>
-      </form>
-    </div>
 
-    <div class="right-pane">
-      <h2>Защита королевства</h2>
-      <p>Авторизуйтесь, чтобы защищать свои владения и продолжить своё величие.</p>
-      <ul>
-        <li>Храните тайны в секрете</li>
-        <li>Берегите свой пароль</li>
-        <li>Используйте магические символы</li>
-      </ul>
+        <div class="right-pane flex-center column">
+            <transition name="fade" mode="out-in">
+                <div v-if="!isRegistering" class="switch-link" key="login">
+                    <a href="#" @click.prevent="toggleRegister">Регистрация</a>
+                </div>
+                <div v-else key="registration">
+                    <h2 class="text-shadow">Защита королевства</h2>
+                    <p>Авторизуйтесь, чтобы защищать свои владения и продолжить своё величие.</p>
+                    <ul>
+                        <li>Храните тайны в секрете</li>
+                        <li>Берегите свой пароль</li>
+                        <li>Используйте магические символы</li>
+                    </ul>
+                </div>
+            </transition>
+        </div>
     </div>
-  </div>
 </template>
 
 <style scoped>
-  .app-container {
-    display: flex;
-    height: 100vh;
-    background: url('/images/parchment-bg.jpg') center center / cover no-repeat;
-    font-family: 'Cinzel Decorative', serif;
-    color: #3b2c02;
-  }
+    .left-pane,
+    .right-pane {
+        flex: 1;
+        padding: 2rem;
+        background-color: rgba(255, 248, 230, 0.85);
+        border: 4px solid #6b4f1d;
+        box-shadow: inset 0 0 10px #6b4f1d;
+    }
 
-  .left-pane, .right-pane {
-    flex: 1;
-    padding: 2rem;
-    background-color: rgba(255, 248, 230, 0.85);
-    border: 4px solid #6b4f1d;
-    box-shadow: inset 0 0 10px #6b4f1d;
-  }
+    .title {
+        margin-bottom: 1.5rem;
+    }
 
-  .left-pane {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
+    .login-form {
+        width: 100%;
+        max-width: 400px;
+    }
 
-  .title {
-    font-size: 2.5rem;
-    margin-bottom: 1.5rem;
-    text-shadow: 2px 2px #6b4f1d;
-  }
+    .form-group {
+        margin-bottom: 1rem;
+        display: flex;
+        flex-direction: column;
+    }
 
-  .login-form {
-    width: 100%;
-    max-width: 400px;
-  }
+    .form-group label {
+        margin-bottom: 0.5rem;
+        font-size: 1.2rem;
+    }
 
-  .form-group {
-    margin-bottom: 1rem;
-    display: flex;
-    flex-direction: column;
-  }
+    .form-group input {
+        padding: 0.5rem;
+        font-size: 1rem;
+        border: 2px solid #6b4f1d;
+        background-color: #f9f1e7;
+    }
 
-  .form-group label {
-    margin-bottom: 0.5rem;
-    font-size: 1.2rem;
-  }
+    .login-button {
+        width: 100%;
+        padding: 0.75rem;
+        font-size: 1.2rem;
+        border: 3px solid #6b4f1d;
+        background-color: #d9b382;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+    }
 
-  .form-group input {
-    padding: 0.5rem;
-    font-size: 1rem;
-    border: 2px solid #6b4f1d;
-    background-color: #f9f1e7;
-  }
+    .login-button:hover {
+        background-color: #c49c6e;
+    }
 
-  .login-button {
-    width: 100%;
-    padding: 0.75rem;
-    font-size: 1.2rem;
-    border: 3px solid #6b4f1d;
-    background-color: #d9b382;
-    cursor: pointer;
-    text-shadow: 1px 1px #6b4f1d;
-    transition: background-color 0.3s ease;
-  }
+    .right-pane h2 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
 
-  .login-button:hover {
-    background-color: #c49c6e;
-  }
+    .right-pane p {
+        margin-bottom: 1rem;
+        line-height: 1.5;
+    }
 
-  .right-pane h2 {
-    font-size: 2rem;
-    margin-bottom: 1rem;
-    text-shadow: 1px 1px #6b4f1d;
-  }
+    .right-pane ul {
+        list-style: disc inside;
+        padding-left: 0;
+    }
 
-  .right-pane p {
-    margin-bottom: 1rem;
-    line-height: 1.5;
-  }
+    .switch-link a {
+        display: inline-block;
+        margin-top: 1rem;
+        padding: 0.5rem 1rem;
+        font-size: 1.2rem;
+        color: #fff;
+        background-color: #6b4f1d;
+        border: 2px solid #3b2c02;
+        border-radius: 4px;
+        text-decoration: none;
+        box-shadow: 2px 2px 0 #3b2c02;
+        transition:
+            background-color 0.3s ease,
+            transform 0.1s ease;
+    }
 
-  .right-pane ul {
-    list-style: disc inside;
-    padding-left: 0;
-  }
+    .switch-link a:hover {
+        background-color: #543b14;
+        transform: translateY(-2px);
+    }
+
+    .switch-link a:active {
+        transform: translateY(0);
+        box-shadow: 1px 1px 0 #3b2c02;
+    }
 </style>
