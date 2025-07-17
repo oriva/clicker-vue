@@ -4,12 +4,15 @@
 
     interface Props {
         id: string;
-        modelValue: string;
+        modelValue: string | number;
+        label?: string;
         required?: boolean;
+        rules?: ((val: string | number) => boolean | string)[];
     }
     const props = withDefaults(defineProps<Props>(), {
         modelValue: '',
         required: false,
+        rules: () => [],
     });
 
     interface Emits {
@@ -31,13 +34,42 @@
 
 <template>
     <div class="form-group">
-        <label for="props.id">Имя пользователя</label>
+        <label for="props.id" class="text-size-normal mb-xxs">{{ label }}</label>
         <QInput
             ref="inputComponent"
             id="props.id"
+            no-error-icon
             v-bind="attrs"
             v-model="model"
+            dense
+            outlined
+            lazy-rules
+            :rules="rules"
             :required="props.required"
         />
     </div>
 </template>
+
+<style scoped lang="scss">
+    .base-input {
+        width: 100%;
+        max-width: 400px;
+        margin-bottom: 1rem;
+    }
+
+    :deep(.q-field__label) {
+        margin-bottom: 0.5rem;
+        font-size: 1.2rem;
+    }
+
+    :deep(.q-field__control) {
+        padding: 0;
+    }
+
+    :deep(.q-field__native) {
+        padding: 0.5rem;
+        font-size: 1rem;
+        background-color: #f9f1e7;
+        color: #3b2c02;
+    }
+</style>

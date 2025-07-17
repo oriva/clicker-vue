@@ -2,70 +2,70 @@ $h1: (
     size: 3rem,
     line-height: 3.3rem,
     weight: 600,
-) !default;
+);
 $h2: (
     size: 2.5rem,
     line-height: 3rem,
     weight: 600,
-) !default;
+);
 $h3: (
-    size: 40px,
-    line-height: 56px,
+    size: 2rem,
+    line-height: 2.5rem,
     weight: 600,
-) !default;
+);
 $h4: (
     size: 32px,
     line-height: 48px,
     weight: 600,
-) !default;
+);
 $h5: (
     size: 28px,
     line-height: 36px,
     weight: 600,
-) !default;
+);
 $h6: (
     size: 22px,
     line-height: 32px,
     weight: 600,
-) !default;
+);
 $h7: (
     size: 20px,
     line-height: 28px,
     weight: 600,
-) !default;
+);
 
 $text-large: (
     size: 18px,
     line-height: 28px,
     weight: 400,
-) !default;
+);
 $text-normal: (
-    size: 16px,
-    line-height: 24px,
+    size: 1.2rem,
+    line-height: 1.4rem,
     weight: 400,
-) !default;
+);
 $text-small: (
     size: 14px,
     line-height: 20px,
     weight: 400,
-) !default;
+);
 $text-ultra-small: (
     size: 12px,
     line-height: 16px,
     weight: 400,
-) !default;
+);
 $text-extra-small: (
     size: 11px,
     line-height: 14px,
     weight: 400,
-) !default;
+);
 $text-tab: (
     size: 10px,
     line-height: 14px,
     weight: 400,
-) !default;
+);
 
-$headings: (
+$text-size-headings: (
     'h1': $h1,
     'h2': $h2,
     'h3': $h3,

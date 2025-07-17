@@ -1,4 +1,5 @@
 <script setup lang="ts">
+    import { QForm, QBtn, QIntersection } from 'quasar';
     import { reactive, ref } from 'vue';
     import { useRouter } from 'vue-router';
 
@@ -24,38 +25,30 @@
 <template>
     <div class="app-container">
         <div class="left-pane flex-center column">
-            <transition name="fade" mode="out-in">
-                <div v-if="isRegistering" key="registration">
-                    <div class="switch-link">
-                        <a href="#" @click.prevent="toggleRegister">Авторизация</a>
-                    </div>
+            <QIntersection v-if="isRegistering" transition="fade" key="registration">
+                <div class="switch-link">
+                    <a href="#" @click.prevent="toggleRegister">Авторизация</a>
                 </div>
-                <div v-else key="login">
-                    <h1 class="title text-size-h2 text-shadow-strong">Добро пожаловать, путник</h1>
-                    <form class="login-form q-mx-auto" @submit.prevent="login">
-                        <FormGroup id="username" v-model="loginModel.username" required />
-                        <div class="form-group">
-                            <label for="username">Имя пользователя</label>
-                            <input
-                                id="username"
-                                v-model="loginModel.username"
-                                type="text"
-                                required
-                            />
-                        </div>
-                        <div class="form-group">
-                            <label for="password">Пароль</label>
-                            <input
-                                id="password"
-                                v-model="loginModel.password"
-                                type="password"
-                                required
-                            />
-                        </div>
-                        <button class="login-button text-shadow" type="submit">Войти</button>
-                    </form>
-                </div>
-            </transition>
+            </QIntersection>
+            <QIntersection v-else transition="fade" key="login">
+                <h1 class="title text-size-h2 text-shadow-strong">Добро пожаловать, путник</h1>
+                <QForm class="login-form q-mx-auto" @submit.prevent="login">
+                    <FormGroup
+                        id="username"
+                        label="Имя пользователя"
+                        v-model="loginModel.username"
+                        required
+                    />
+                    <FormGroup
+                        id="password"
+                        type="password"
+                        label="Пароль"
+                        v-model="loginModel.username"
+                        required
+                    />
+                    <QBtn label="Войти" class="login-button text-shadow" type="submit" />
+                </QForm>
+            </QIntersection>
         </div>
 
         <div class="right-pane flex-center column">
@@ -151,7 +144,6 @@
         color: #fff;
         background-color: #6b4f1d;
         border: 2px solid #3b2c02;
-        border-radius: 4px;
         text-decoration: none;
         box-shadow: 2px 2px 0 #3b2c02;
         transition:

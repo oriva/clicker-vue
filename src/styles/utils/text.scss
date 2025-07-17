@@ -9,8 +9,8 @@
     text-shadow: 1px 1px #6b4f1d;
 }
 
-@mixin generate-text-classes($headings) {
-    @each $name, $props in $headings {
+@mixin generate-text-classes($text-size-headings) {
+    @each $name, $props in $text-size-headings {
         .text-size-#{$name} {
             font-size: map.get($props, size);
             line-height: map.get($props, line-height);
@@ -19,4 +19,4 @@
     }
 }
 
-@include generate-text-classes(text-vars.$headings);
+@include generate-text-classes(text-vars.$text-size-headings);

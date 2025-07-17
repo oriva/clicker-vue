@@ -1,0 +1,29 @@
+@use '../variables/space.scss' as space;
+
+@each $size, $value in space.$spacers {
+    .mt-#{$size} {
+        margin-top: $value;
+    }
+    .mr-#{$size} {
+        margin-right: $value;
+    }
+    .mb-#{$size} {
+        margin-bottom: $value;
+    }
+    .ml-#{$size} {
+        margin-left: $value;
+    }
+
+    .mx-#{$size} {
+        margin-left: $value;
+        margin-right: $value;
+    }
+    .my-#{$size} {
+        margin-top: $value;
+        margin-bottom: $value;
+    }
+
+    .ma-#{$size} {
+        margin: $value;
+    }
+}
