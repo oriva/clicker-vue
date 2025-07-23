@@ -1,6 +1,7 @@
 # ./
 
 This template should help get you started developing with Vue 3 in Vite.
+vue-clicker.local, \*.vue-clicker.local
 
 ## Recommended IDE Setup
 
@@ -42,4 +43,10 @@ npm run test:unit
 
 ```sh
 npm run lint
+```
+
+### Для docker
+
+```sh
+docker compose -f docker-compose-local.yml up -d --build
 ```

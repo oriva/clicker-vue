@@ -31,7 +31,9 @@
                 </div>
             </QIntersection>
             <QIntersection v-else transition="fade" key="login">
-                <h1 class="title text-size-h2 text-shadow-strong">Добро пожаловать, путник</h1>
+                <h1 class="title text-size-h2 text-shadow-strong mb-md"
+                    >Добро пожаловать, путник</h1
+                >
                 <QForm class="login-form q-mx-auto" @submit.prevent="login">
                     <FormGroup
                         id="username"
@@ -43,7 +45,7 @@
                         id="password"
                         type="password"
                         label="Пароль"
-                        v-model="loginModel.username"
+                        v-model="loginModel.password"
                         required
                     />
                     <QBtn label="Войти" class="login-button text-shadow" type="submit" />
@@ -78,10 +80,6 @@
         background-color: rgba(255, 248, 230, 0.85);
         border: 4px solid #6b4f1d;
         box-shadow: inset 0 0 10px #6b4f1d;
-    }
-
-    .title {
-        margin-bottom: 1.5rem;
     }
 
     .login-form {
@@ -138,7 +136,6 @@
 
     .switch-link a {
         display: inline-block;
-        margin-top: 1rem;
         padding: 0.5rem 1rem;
         font-size: 1.2rem;
         color: #fff;

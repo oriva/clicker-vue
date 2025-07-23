@@ -23,7 +23,32 @@
         margin-bottom: $value;
     }
 
-    .ma-#{$size} {
-        margin: $value;
+    .pa-#{$size} {
+        padding: $value;
+    }
+    .pt-#{$size} {
+        padding-top: $value;
+    }
+    .pr-#{$size} {
+        padding-right: $value;
+    }
+    .pb-#{$size} {
+        padding-bottom: $value;
+    }
+    .pl-#{$size} {
+        padding-left: $value;
+    }
+
+    .px-#{$size} {
+        padding-left: $value;
+        padding-right: $value;
+    }
+    .py-#{$size} {
+        padding-top: $value;
+        padding-bottom: $value;
+    }
+
+    .pa-#{$size} {
+        padding: $value;
     }
 }
