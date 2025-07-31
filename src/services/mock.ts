@@ -4,12 +4,19 @@ import { v4 as uuid } from 'uuid';
 
 export function installMocks() {
     const mock = new AxiosMockAdapter(http, { delayResponse: 600 });
-    const mockUsers: { id: string; email: string; password: string; name: string }[] = [
+    const mockUsers: {
+        id: string;
+        email: string;
+        password: string;
+        name: string;
+        token?: string;
+    }[] = [
         {
             id: '1',
             email: 'test@test.ru',
             password: 'test',
             name: 'Тестовый Пользователь',
+            token: 'fake.1.token',
         },
     ];
 
