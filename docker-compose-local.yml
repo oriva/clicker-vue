@@ -4,6 +4,8 @@ services:
     clicker-vue:
         container_name: clicker-vue
         restart: always
+        ports:
+            - 8088:3000
         hostname: clicker-vue
         build:
             dockerfile: Dockerfile
@@ -15,13 +17,13 @@ services:
         environment:
             API_URL: https://clicker-vue.ru/api/
             VITE_USE_MOCKS: true
-    proxy:
-        build:
-            context: .docker/proxy
-            dockerfile: Dockerfile
-        depends_on:
-            - clicker-vue
-        ports:
-            - 8082:80
-        volumes:
-            - .docker/proxy/templates:/etc/nginx/templates
+    # proxy:
+    #     build:
+    #         context: .docker/proxy
+    #         dockerfile: Dockerfile
+    #     depends_on:
+    #         - clicker-vue
+    #     ports:
+    #         - 8082:80
+    #     volumes:
+    #         - .docker/proxy/templates:/etc/nginx/templates

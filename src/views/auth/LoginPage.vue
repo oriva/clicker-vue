@@ -1,11 +1,16 @@
 <script setup lang="ts">
-    import { QForm, QBtn, QIntersection } from 'quasar';
+    import { useQuasar, QForm, QBtn, QIntersection } from 'quasar';
+    import axios from 'axios';
     import { reactive, ref } from 'vue';
     import { useRouter } from 'vue-router';
 
     import { FormGroup } from 'src/components';
+    import { useAuthStore } from '@/stores/auth';
 
     const router = useRouter();
+    const $q = useQuasar();
+    const auth = useAuthStore();
+
     const isRegistering = ref(false);
     const loginModel = reactive({
         username: '',
@@ -16,9 +21,33 @@
         isRegistering.value = !isRegistering.value;
     }
 
-    function login() {
-        console.log('Авторизация:', loginModel.username, loginModel.password);
-        router.push('/game');
+    async function login() {
+        try {
+            await auth.login(loginModel.username, loginModel.password);
+            router.push('/play');
+        } catch (err: unknown) {
+            let errorMessage = '';
+            if (axios.isAxiosError(err) && err.response) {
+                // err — это AxiosError, здесь уже можно безопасно обращаться к response
+                console.error('Ошибка авторизации:', err.response);
+
+                // Типизируйте тело ответа, чтобы избежать any
+                type ErrorBody = { error?: { userMessage?: string } };
+                const data = err.response.data as ErrorBody;
+
+                errorMessage = data.error?.userMessage ?? 'Не удалось авторизоваться';
+            } else {
+                console.error('Неизвестная ошибка:', err);
+                errorMessage = 'Не удалось авторизоваться';
+            }
+
+            $q.notify({
+                type: 'negative',
+                message: errorMessage,
+                position: 'top',
+                timeout: 4000,
+            });
+        }
     }
 </script>
 
@@ -35,12 +64,7 @@
                     >Добро пожаловать, путник</h1
                 >
                 <QForm class="login-form q-mx-auto" @submit.prevent="login">
-                    <FormGroup
-                        id="username"
-                        label="Имя пользователя"
-                        v-model="loginModel.username"
-                        required
-                    />
+                    <FormGroup id="username" label="Email" v-model="loginModel.username" required />
                     <FormGroup
                         id="password"
                         type="password"

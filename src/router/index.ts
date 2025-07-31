@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router';
 import { useHead } from '@vueuse/head';
 
 import { authRoutes } from './modules/auth';
+import { authGuard } from './guards/authGuard';
 
 const baseRoutes = [
     {
@@ -22,6 +23,12 @@ const baseRoutes = [
         },
     },
     {
+        path: '/play',
+        name: 'play',
+        component: () => import('@/views/game/GameLayout.vue'),
+        meta: { requiresAuth: true },
+    },
+    {
         path: '/:pathMatch(.*)*',
         name: 'not-found',
         component: () => import('@/views/PageNotFound.vue'),
@@ -37,6 +44,7 @@ type HeadMeta = {
     head?: Record<string, unknown>;
 };
 
+router.beforeEach(authGuard);
 router.afterEach(to => {
     const meta = to.meta as HeadMeta;
     if (meta?.head) useHead(meta.head);

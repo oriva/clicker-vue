@@ -23,6 +23,6 @@ export const authRoutes: RouteRecordRaw[] = [
         path: '/forgot',
         name: 'forgot',
         component: () => import('@/views/auth/PasswordReset.vue'),
-        meta: { title: 'Восстановление пароля', guestOnly: true },
+        meta: { guestOnly: true, head: { title: 'Восстановление пароля' } },
     },
 ];

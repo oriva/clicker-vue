@@ -1,35 +1,44 @@
 import { defineStore } from 'pinia';
-import { ref } from 'vue';
+import { computed, reactive, toRefs } from 'vue';
 
 import { tokenStorage } from '@/services/tokenStorage';
-
-interface User {
-    id: number;
-    username: string;
-    email: string;
-}
+import type { UserProfile } from '@/types';
+import * as api from '@/services/authApi';
 
 export const useAuthStore = defineStore('auth', () => {
-    const token = ref<string | null>(null);
-    const user = ref<User | null>(null);
+    const state = reactive({
+        token: <string | null>null,
+        user: <UserProfile | null>null,
+        initialised: false,
+    });
+
+    const isAuthenticated = computed(() => !!state.token);
 
     async function loadAuth() {
-        token.value = tokenStorage.get();
+        state.token = tokenStorage.get();
 
-        if (token.value) {
+        if (state.token) {
             try {
-                // user.value = await api.fetchMe(token.value);
+                state.user = await api.loadUserProfile(state.token);
             } catch {
                 logout();
             }
         }
+        state.initialised = true;
+    }
+
+    async function login(email: string, pass: string) {
+        const { accessToken, profile } = await api.login(email, pass);
+        state.token = accessToken;
+        state.user = profile;
+        tokenStorage.set(accessToken);
     }
 
     function logout() {
-        token.value = null;
-        user.value = null;
+        state.token = null;
+        state.user = null;
         tokenStorage.remove();
     }
 
-    return { loadAuth, token };
+    return { ...toRefs(state), loadAuth, login, logout, isAuthenticated };
 });

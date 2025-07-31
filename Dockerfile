@@ -1,10 +1,9 @@
 FROM node:22-alpine AS development
 ENV NODE_ENV=development
 WORKDIR /usr/src/app
-COPY package.json ./
-# RUN touch cert/local-key.pem cert/local.pem
+COPY . /usr/src/app/
+RUN touch cert/local-key.pem cert/local.pem
 RUN npm install --include=optional
-COPY . .
 RUN npm run build
 CMD ["npm", "run", "dev"]
 

@@ -2,9 +2,10 @@ import './styles/main.scss';
 
 import { createApp } from 'vue';
 import { createPinia } from 'pinia';
-import { Quasar } from 'quasar';
+import { Quasar, Notify } from 'quasar';
 import { createHead } from '@vueuse/head';
 
+import { installMocks } from '@/services/mock';
 import App from './App.vue';
 import router from './router';
 
@@ -16,7 +17,7 @@ app.use(createPinia());
 app.use(router);
 app.use(createHead());
 app.use(Quasar, {
-    plugins: {},
+    plugins: { Notify },
     config: {
         brand: {
             primary: '#6b4f1d',
@@ -27,5 +28,7 @@ app.use(Quasar, {
         },
     },
 });
+
+installMocks();
 
 app.mount('#app');
