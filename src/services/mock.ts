@@ -3,7 +3,7 @@ import { http } from './httpClient';
 import { v4 as uuid } from 'uuid';
 
 export function installMocks() {
-    const mock = new AxiosMockAdapter(http, { delayResponse: 600 });
+    const mock = new AxiosMockAdapter(http, { delayResponse: Math.round(Math.random() * 500) });
     const mockUsers: {
         id: string;
         email: string;
@@ -44,8 +44,9 @@ export function installMocks() {
         return [200, { accessToken: `fake.${id}.token`, profile: { id, email, name } }];
     });
 
-    mock.onPost('/auth/user-profile').reply(({ data }) => {
-        const { token } = JSON.parse(data);
+    mock.onGet('/auth/user-profile').reply(({ headers }) => {
+        const authHeader = headers?.Authorization || headers?.authorization;
+        const token = authHeader?.replace(/Bearer\s+/i, '') ?? '';
         const user = mockUsers.find(u => `fake.${u.id}.token` === token);
         if (!user) return [401, { message: 'Unauthorized' }];
         const { id, email, name } = user;

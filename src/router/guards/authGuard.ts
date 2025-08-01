@@ -7,7 +7,6 @@ export async function authGuard(
     next: NavigationGuardNext,
 ) {
     const auth = useAuthStore();
-    console.log('auth', auth.initialised);
 
     if (!auth.initialised) await auth.loadAuth();
 
