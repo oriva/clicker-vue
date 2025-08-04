@@ -5,7 +5,7 @@ services:
         container_name: clicker-vue
         restart: always
         ports:
-            - 8088:3000
+            - 8080:8080
         hostname: clicker-vue
         build:
             dockerfile: Dockerfile

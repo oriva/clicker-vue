@@ -1,81 +1,18 @@
 <script setup lang="ts">
-    import { useQuasar, QForm, QBtn, QIntersection } from 'quasar';
-    import axios from 'axios';
-    import { reactive, ref } from 'vue';
-    import { useRouter } from 'vue-router';
+    import { ref } from 'vue';
 
-    import { FormGroup } from 'src/components';
-    import { useAuthStore } from '@/stores/auth';
-
-    const router = useRouter();
-    const $q = useQuasar();
-    const auth = useAuthStore();
+    import LoginForm from './LoginForm.vue';
 
     const isRegistering = ref(false);
-    const loginModel = reactive({
-        username: '',
-        password: '',
-    });
 
     function toggleRegister() {
         isRegistering.value = !isRegistering.value;
-    }
-
-    async function login() {
-        try {
-            await auth.login(loginModel.username, loginModel.password);
-            router.push('/play');
-        } catch (err: unknown) {
-            let errorMessage = '';
-            if (axios.isAxiosError(err) && err.response) {
-                // err — это AxiosError, здесь уже можно безопасно обращаться к response
-                console.error('Ошибка авторизации:', err.response);
-
-                // Типизируйте тело ответа, чтобы избежать any
-                type ErrorBody = { error?: { userMessage?: string } };
-                const data = err.response.data as ErrorBody;
-
-                errorMessage = data.error?.userMessage ?? 'Не удалось авторизоваться';
-            } else {
-                console.error('Неизвестная ошибка:', err);
-                errorMessage = 'Не удалось авторизоваться';
-            }
-
-            $q.notify({
-                type: 'negative',
-                message: errorMessage,
-                position: 'top',
-                timeout: 4000,
-            });
-        }
     }
 </script>
 
 <template>
     <div class="app-container">
-        <div class="left-pane flex-center column">
-            <QIntersection v-if="isRegistering" transition="fade" key="registration">
-                <div class="switch-link">
-                    <a href="#" @click.prevent="toggleRegister">Авторизация</a>
-                </div>
-            </QIntersection>
-            <QIntersection v-else transition="fade" key="login">
-                <h1 class="title text-size-h2 text-shadow-strong mb-md"
-                    >Добро пожаловать, путник</h1
-                >
-                <QForm class="login-form q-mx-auto" @submit.prevent="login">
-                    <FormGroup id="username" label="Email" v-model="loginModel.username" required />
-                    <FormGroup
-                        id="password"
-                        type="password"
-                        label="Пароль"
-                        v-model="loginModel.password"
-                        required
-                    />
-                    <QBtn label="Войти" class="login-button text-shadow" type="submit" />
-                </QForm>
-            </QIntersection>
-        </div>
+        <LoginForm :is-registering="isRegistering" @toggle="toggleRegister" />
 
         <div class="right-pane flex-center column">
             <transition name="fade" mode="out-in">
@@ -96,62 +33,24 @@
     </div>
 </template>
 
-<style scoped>
-    .left-pane,
+<style scoped lang="scss">
     .right-pane {
         flex: 1;
     }
 
-    .login-form {
-        width: 100%;
-        max-width: 400px;
-    }
-
-    .form-group {
-        margin-bottom: 1rem;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .form-group label {
-        margin-bottom: 0.5rem;
-        font-size: 1.2rem;
-    }
-
-    .form-group input {
-        padding: 0.5rem;
-        font-size: 1rem;
-        border: 2px solid #6b4f1d;
-        background-color: #f9f1e7;
-    }
-
-    .login-button {
-        width: 100%;
-        padding: 0.75rem;
-        font-size: 1.2rem;
-        border: 3px solid #6b4f1d;
-        background-color: #d9b382;
-        cursor: pointer;
-        transition: background-color 0.3s ease;
-    }
-
-    .login-button:hover {
-        background-color: #c49c6e;
-    }
-
-    .right-pane h2 {
-        font-size: 2rem;
-        margin-bottom: 1rem;
-    }
-
-    .right-pane p {
-        margin-bottom: 1rem;
-        line-height: 1.5;
-    }
-
-    .right-pane ul {
-        list-style: disc inside;
-        padding-left: 0;
+    .right-pane {
+        h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+        }
+        p {
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        ul {
+            list-style: disc inside;
+            padding-left: 0;
+        }
     }
 
     .switch-link a {
