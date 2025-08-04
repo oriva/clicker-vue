@@ -3,7 +3,9 @@
 </script>
 
 <template>
-    <div class="flex h-full">
-        <LeftPanel />
+    <div class="app-container">
+        <LeftPanel class="left-pane" />
     </div>
 </template>
+
+<style scoped lang="scss"></style>

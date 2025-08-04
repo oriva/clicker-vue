@@ -33,14 +33,6 @@
 </template>
 
 <style scoped lang="scss">
-    .left-pane,
-    .right-pane {
-        padding: 2rem;
-        background-color: rgba(255, 248, 230, 0.85);
-        border: 4px solid #6b4f1d;
-        box-shadow: inset 0 0 10px #6b4f1d;
-    }
-
     .right-pane h2 {
         font-size: 2.5rem;
         margin-bottom: 1rem;

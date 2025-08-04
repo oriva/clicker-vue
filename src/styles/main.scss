@@ -13,7 +13,16 @@
 .app-container {
     display: flex;
     height: 100vh;
-    background: url('/images/parchment-bg.jpg') center center / cover no-repeat;
+    width: 100%;
+    background: url('/images/parchment-bg.png') center center / cover no-repeat;
     font-family: 'Cinzel Decorative', serif;
     color: #3b2c02;
+}
+
+.left-pane,
+.right-pane {
+    padding: 2rem;
+    background-color: rgba(255, 248, 230, 0.85);
+    border: 4px solid #6b4f1d;
+    box-shadow: inset 0 0 10px #6b4f1d;
 }

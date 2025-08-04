@@ -83,7 +83,7 @@
                     <a href="#" @click.prevent="toggleRegister">Регистрация</a>
                 </div>
                 <div v-else key="registration">
-                    <h2 class="text-shadow">Защита королевства</h2>
+                    <h2 class="text-size-h3 text-shadow">Защита королевства</h2>
                     <p>Авторизуйтесь, чтобы защищать свои владения и продолжить своё величие.</p>
                     <ul>
                         <li>Храните тайны в секрете</li>
@@ -100,10 +100,6 @@
     .left-pane,
     .right-pane {
         flex: 1;
-        padding: 2rem;
-        background-color: rgba(255, 248, 230, 0.85);
-        border: 4px solid #6b4f1d;
-        box-shadow: inset 0 0 10px #6b4f1d;
     }
 
     .login-form {

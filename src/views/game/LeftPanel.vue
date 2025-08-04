@@ -1,5 +1,9 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+    import PlayerStats from './PlayerStats.vue';
+</script>
 
 <template>
-    <div class="flex h-full"> </div>
+    <div class="flex">
+        <PlayerStats />
+    </div>
 </template>
