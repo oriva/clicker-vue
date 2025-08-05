@@ -58,7 +58,7 @@
 </script>
 
 <template>
-    <div class="left-pane flex-center column">
+    <div class="left-pane flex-center column pa-lg">
         <QIntersection v-if="props.isRegistering" transition="fade" key="registration">
             <div class="switch-link">
                 <a href="#" @click.prevent="emit('toggle')">Авторизация</a>

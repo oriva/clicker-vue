@@ -8,4 +8,8 @@
     </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+    .left-pane {
+        min-width: 20%;
+    }
+</style>

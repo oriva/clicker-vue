@@ -10,7 +10,7 @@
 <template>
     <div class="app-container row">
         <!-- Левая часть: приглашение начать -->
-        <div class="col left-pane flex-center column">
+        <div class="col left-pane flex-center column pa-lg">
             <h1 class="title text-center text-size-h2 text-shadow-strong">
                 Готовы ли вы к приключению?
             </h1>

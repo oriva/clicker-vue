@@ -4,6 +4,6 @@
 
 <template>
     <div class="flex">
-        <PlayerStats />
+        <PlayerStats class="col-grow" />
     </div>
 </template>
