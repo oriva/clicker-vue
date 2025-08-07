@@ -4,12 +4,7 @@
 
 <template>
     <div class="app-container">
-        <LeftPanel class="left-pane" />
+        <LeftPanel class="left-pane col-3" />
+        <router-view class="col" />
     </div>
 </template>
-
-<style scoped lang="scss">
-    .left-pane {
-        min-width: 20%;
-    }
-</style>

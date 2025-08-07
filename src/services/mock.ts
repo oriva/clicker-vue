@@ -1,6 +1,7 @@
 import AxiosMockAdapter from 'axios-mock-adapter';
 import { http } from './httpClient';
 import { v4 as uuid } from 'uuid';
+import type { Location } from '@/types';
 
 export function installMocks() {
     const mock = new AxiosMockAdapter(http, { delayResponse: Math.round(Math.random() * 500) });
@@ -17,6 +18,52 @@ export function installMocks() {
             password: 'test',
             name: 'Тестовый Пользователь',
             token: 'fake.1.token',
+        },
+    ];
+
+    const mockLocations: Location[] = [
+        {
+            id: 'forest',
+            name: 'Таинственный лес',
+            description: 'Темный лес, полный загадок',
+            monsters: [
+                {
+                    id: 'goblin',
+                    name: 'Гоблин',
+                    health: 30,
+                    attack: 5,
+                    picture: '/images/monsters/goblin.png',
+                },
+                {
+                    id: 'big-goblin',
+                    name: 'Большой гоблин',
+                    health: 50,
+                    attack: 7,
+                    picture: '/images/monsters/big-goblin.png',
+                },
+            ],
+            npcs: [
+                {
+                    id: 'sage',
+                    name: 'Мудрец',
+                    picture: '/images/npc/sage.png',
+                    dialogue: ['Приветствую, герой.'],
+                },
+            ],
+        },
+        {
+            id: 'village',
+            name: 'Деревня',
+            description: 'Мирное место',
+            monsters: [],
+            npcs: [
+                {
+                    id: 'villager',
+                    name: 'Житель',
+                    picture: '/images/npc/villager.png',
+                    dialogue: ['Привет!'],
+                },
+            ],
         },
     ];
 
@@ -51,5 +98,13 @@ export function installMocks() {
         if (!user) return [401, { message: 'Unauthorized' }];
         const { id, email, name } = user;
         return [200, { profile: { id, email, name } }];
+    });
+
+    mock.onGet('/locations').reply(200, { locations: mockLocations });
+
+    mock.onGet(/\/locations\/[^/]+/).reply(config => {
+        const id = config.url?.split('/').pop() || '';
+        const location = mockLocations.find(l => l.id === id);
+        return location ? [200, { location }] : [404, { message: 'Not found' }];
     });
 }

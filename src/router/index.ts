@@ -27,6 +27,13 @@ const baseRoutes = [
         name: 'play',
         component: () => import('@/views/game/GameLayout.vue'),
         meta: { requiresAuth: true },
+        children: [
+            {
+                path: ':locationId?',
+                name: 'location',
+                component: () => import('@/views/game/LocationView.vue'),
+            },
+        ],
     },
     {
         path: '/:pathMatch(.*)*',

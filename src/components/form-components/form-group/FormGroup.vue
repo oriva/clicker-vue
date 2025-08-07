@@ -9,11 +9,8 @@
         required?: boolean;
         rules?: ((val: string | number) => boolean | string)[];
     }
-    const props = withDefaults(defineProps<Props>(), {
-        modelValue: '',
-        required: false,
-        rules: () => [],
-    });
+
+    const { modelValue = '', required = false } = defineProps<Props>();
 
     interface Emits {
         (e: 'update:modelValue', v: Props['modelValue']): void;
@@ -24,7 +21,7 @@
 
     const model = computed({
         get() {
-            return props.modelValue;
+            return modelValue;
         },
         set(v) {
             emit('update:modelValue', v);
@@ -45,7 +42,7 @@
             outlined
             lazy-rules
             :rules="rules"
-            :required="props.required"
+            :required="required"
         />
     </div>
 </template>

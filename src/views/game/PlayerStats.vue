@@ -1,12 +1,12 @@
 <script setup lang="ts">
-    import { QItem, QItemSection, QItemLabel } from 'quasar';
+    import { QList, QItem, QItemSection, QItemLabel } from 'quasar';
     import { usePlayerStore } from '@/stores/player';
 
     const player = usePlayerStore();
 </script>
 
 <template>
-    <q-list class="q-pa-sm">
+    <QList class="q-pa-sm">
         <QItemLabel header class="medieval-font q-px-sm">Персонаж</QItemLabel>
 
         <QItem>
@@ -28,5 +28,5 @@
             <QItemSection>Скорость</QItemSection>
             <QItemSection class="text-right">{{ player.fighterStats.attackSpeed }}с</QItemSection>
         </QItem>
-    </q-list>
+    </QList>
 </template>
