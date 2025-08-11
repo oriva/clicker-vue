@@ -1,7 +1,9 @@
 <script setup lang="ts">
-    import { useLocationsStore } from '@/stores/location';
-    import { useRoute } from 'vue-router';
     import { onMounted, watch } from 'vue';
+    import { useRoute } from 'vue-router';
+
+    import { useCursorMixin } from '@/composables/useCursor';
+    import { useLocationsStore } from '@/stores/location';
 
     const locations = useLocationsStore();
     const route = useRoute();
@@ -19,6 +21,8 @@
             if (typeof id === 'string') locations.select(id);
         },
     );
+
+    const { swordCursor, dialogCursor } = useCursorMixin();
 </script>
 
 <template>
@@ -27,7 +31,7 @@
             <h2 class="medieval-font">{{ locations.current.name }}</h2>
             <p>{{ locations.current.description }}</p>
             <div v-if="locations.current.monsters.length">
-                <h3>Монстры</h3>
+                <h3 class="mb-md">Монстры</h3>
                 <div class="entities-list q-gutter-sm">
                     <div
                         v-for="monster in locations.current.monsters"
@@ -40,7 +44,7 @@
                 </div>
             </div>
             <div v-if="locations.current.npcs.length">
-                <h3>NPC</h3>
+                <h3 class="mb-md">NPC</h3>
                 <div class="entities-list q-gutter-sm">
                     <div v-for="npc in locations.current.npcs" :key="npc.name" class="entity npc">
                         <img :src="npc.picture" :alt="npc.name" />
@@ -57,6 +61,8 @@
 
 <style scoped lang="scss">
     .entity {
+        --sword-cursor: v-bind(swordCursor);
+        --dialog-cursor: v-bind(dialogCursor);
         display: flex;
         align-items: center;
         gap: 0.5rem;
@@ -71,12 +77,24 @@
             border-radius: 4px;
         }
 
-        &.monster img {
-            border: 2px solid #b71c1c;
+        &.monster {
+            img {
+                border: 2px solid #b71c1c;
+            }
+
+            &:hover {
+                cursor: v-bind(swordCursor);
+            }
         }
 
-        &.npc img {
-            border: 2px solid #1e88e5;
+        &.npc {
+            img {
+                border: 2px solid #1e88e5;
+            }
+
+            &:hover {
+                cursor: v-bind(dialogCursor);
+            }
         }
     }
 </style>

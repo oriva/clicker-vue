@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <div class="app-container">
+    <div class="app-container row">
         <LeftPanel class="left-pane col-3" />
         <router-view class="col" />
     </div>

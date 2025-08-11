@@ -27,7 +27,19 @@
             :active="loc.id === locations.currentId"
             @click="go(loc.id)"
         >
-            <QItemSection>{{ loc.name }}</QItemSection>
+            <QItemSection class="pr-none" avatar>
+                <img class="location-img" :src="loc?.picture" alt="" />
+            </QItemSection>
+            <QItemSection>
+                {{ loc.name }}
+            </QItemSection>
         </QItem>
     </QList>
 </template>
+
+<style scoped lang="scss">
+    .location-img {
+        width: 1.5rem;
+        height: 1.5rem;
+    }
+</style>

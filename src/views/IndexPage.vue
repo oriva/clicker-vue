@@ -17,7 +17,7 @@
             <button class="start-button" @click="startGame">Начать приключение</button>
         </div>
 
-        <div class="col right-pane flex-center column">
+        <div class="col right-pane flex-center column pa-lg">
             <h2>О игре</h2>
             <p>
                 В этой игре вы будете кликать, чтобы собирать драгоценные золоты и расширять своё

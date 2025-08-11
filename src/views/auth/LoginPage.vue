@@ -11,7 +11,7 @@
 </script>
 
 <template>
-    <div class="app-container">
+    <div class="app-container flex">
         <LoginForm :is-registering="isRegistering" @toggle="toggleRegister" />
 
         <div class="right-pane flex-center column">

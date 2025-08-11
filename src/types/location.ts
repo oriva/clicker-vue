@@ -17,6 +17,7 @@ export interface Location {
     id: string;
     name: string;
     description: string;
+    picture?: string;
     monsters: Monster[];
     npcs: Npc[];
 }

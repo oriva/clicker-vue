@@ -4,7 +4,7 @@
 </script>
 
 <template>
-    <div class="column q-gutter-sm q-pa-sm full-height">
+    <div class="column q-gutter-sm q-pa-sm">
         <PlayerStats class="" />
         <LocationNavigation class="col" />
     </div>

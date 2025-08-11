@@ -23,9 +23,10 @@ export function installMocks() {
 
     const mockLocations: Location[] = [
         {
-            id: 'forest',
-            name: 'Таинственный лес',
+            id: 'dark-forest',
+            name: 'Тёмный лес',
             description: 'Темный лес, полный загадок',
+            picture: '/images/locations/dark-forest.png',
             monsters: [
                 {
                     id: 'goblin',
@@ -55,6 +56,7 @@ export function installMocks() {
             id: 'village',
             name: 'Деревня',
             description: 'Мирное место',
+            picture: '/images/locations/village.png',
             monsters: [],
             npcs: [
                 {
