@@ -35,7 +35,7 @@
                 <div class="entities-list q-gutter-sm">
                     <div
                         v-for="monster in locations.current.monsters"
-                        :key="monster.name"
+                        :key="monster.id"
                         class="entity monster"
                     >
                         <img :src="monster.picture" :alt="monster.name" />
@@ -46,7 +46,7 @@
             <div v-if="locations.current.npcs.length">
                 <h3 class="mb-md">NPC</h3>
                 <div class="entities-list q-gutter-sm">
-                    <div v-for="npc in locations.current.npcs" :key="npc.name" class="entity npc">
+                    <div v-for="npc in locations.current.npcs" :key="npc.id" class="entity npc">
                         <img :src="npc.picture" :alt="npc.name" />
                         <span>{{ npc.name }}</span>
                     </div>

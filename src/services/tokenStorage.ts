@@ -1,15 +1,15 @@
 export const tokenKey = 'auth-token';
 
-export interface TokenStorage {
-    get(): string | null;
-    set(token: string): void;
+export interface TokenStorage<T> {
+    get(): T | null;
+    set(token: T): void;
     remove(): void;
 }
 
-export const localTokenStorage: TokenStorage = {
+export const localTokenStorage: TokenStorage<string> = {
     get: () => localStorage.getItem(tokenKey),
     set: t => localStorage.setItem(tokenKey, t),
     remove: () => localStorage.removeItem(tokenKey),
 };
 
-export const tokenStorage: TokenStorage = localTokenStorage;
+export const tokenStorage: TokenStorage<string> = localTokenStorage;

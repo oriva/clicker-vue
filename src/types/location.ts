@@ -1,23 +1,19 @@
-export interface Monster {
+interface BaseEntity {
     id: string;
     name: string;
+    picture?: string;
+}
+export interface Monster extends BaseEntity {
     health: number;
     attack: number;
-    picture?: string;
 }
 
-export interface Npc {
-    id: string;
-    name: string;
+export interface Npc extends BaseEntity {
     dialogue: string[];
-    picture?: string;
 }
 
-export interface Location {
-    id: string;
-    name: string;
+export interface Location extends BaseEntity {
     description: string;
-    picture?: string;
     monsters: Monster[];
     npcs: Npc[];
 }

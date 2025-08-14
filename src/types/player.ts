@@ -1,7 +1,17 @@
-export interface Item {
-    id: string;
-    name: string;
-    type: 'weapon' | 'armor' | 'misc';
-    baseStats: { attack?: number; armorPen?: number; defense?: number };
-    maxEnhance: number;
+export type Resource = { max: number; current: number };
+
+export interface PlayerStats {
+    health: Resource;
+    mana: Resource;
+    experience: number;
+    level: number;
+    gold: number;
+}
+
+export interface FighterStats {
+    baseDamage: number;
+    attackSpeed: number;
+    armorPen: number;
+    critChance?: number;
+    critMultiplier?: number;
 }
